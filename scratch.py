@@ -1,41 +1,26 @@
 import torch
 
 from src.data import get_shakespeare
-from tatooine.data.tabular import DataBank
-from tatooine.ml.text.tokenizers import CharacterTokenizer
-
-db = DataBank()
+from tatooine.ml.text.models import BigramLanguageModel
+from tatooine.ml.train import train_model
 
 
-with open("data/shakespeare.txt", "r", encoding="utf-8") as f:
-    text = f.read()
+data = get_shakespeare()
 
-print(len(text))
-print(text[:1000])
+bm = BigramLanguageModel(data.vocab_size)
+bm = bm.to(data.device)
 
+gen = bm.generate(
+    torch.tensor(data.tokenizer.encode(" "), dtype=torch.long).reshape(1, -1), 100
+)
 
-chars = sorted(list(set(text)))
+print(data.tokenizer.decode(gen.tolist()[0]))
 
-vocab_size = len(chars)
+optimizer = torch.optim.Adam(bm.parameters(), lr=1e-3)
 
-print("".join(chars))
-print(vocab_size)
+train_model(bm, data, optimizer)
 
-
-char_tokenizer = CharacterTokenizer(chars)
-
-data = torch.tensor(char_tokenizer.encode(text), dtype=torch.long)
-
-print(data.shape, data.dtype)
-
-
-n = int(data.shape[0] * 0.9)
-
-train = data[:n]
-valid = data[n:]
-
-block_size = 8
-
-print(train[: block_size + 1])
-
-print(get_shakespeare())
+gen = bm.generate(
+    torch.tensor(data.tokenizer.encode(" "), dtype=torch.long).reshape(1, -1), 100
+)
+print(data.tokenizer.decode(gen.tolist()[0]))
