@@ -8,7 +8,7 @@ from tatooine.ml.train import train_model
 
 
 """ Parameters: """
-n_updates = 500
+n_updates = 10000
 block_size = 64
 batch_size = 64
 n_embd = 64

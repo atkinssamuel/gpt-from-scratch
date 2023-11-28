@@ -32,9 +32,9 @@ class Head(nn.Module):
         weights = weights.masked_fill(self.tril[:T, :T] == 0, float("-inf"))
         weights = F.softmax(weights, dim=-1)
 
-        weights = self.dropout(weights) # (B, T, T)
+        weights = self.dropout(weights)  # (B, T, T)
 
-        return weights @ v # (B, T, T) @ (B, T, C) ~ (B, T, C)
+        return weights @ v  # (B, T, T) @ (B, T, C) ~ (B, T, C)
 
 
 class MultiHeadAttention(nn.Module):
@@ -88,15 +88,15 @@ class Block(nn.Module):
                 f"No 'head_size' exists that can support n_embd = {n_embd} and n_heads = {n_heads}"
             )
 
-        self.sa = MultiHeadAttention(n_embd, head_size, block_size, n_heads)
+        self.mha = MultiHeadAttention(n_embd, head_size, block_size, n_heads)
         self.ffwd = SquareFeedForward(n_embd)
         self.ln1 = nn.LayerNorm(n_embd)
         self.ln2 = nn.LayerNorm(n_embd)
 
     def forward(self, X: torch.tensor):
         ln1 = self.ln1(X)
-        sa1 = self.sa(ln1)
-        X = X + sa1
+        mha = self.mha(ln1)
+        X = X + mha
 
         ln2 = self.ln2(X)
         ffwd = self.ffwd(ln2)
