@@ -1,26 +1,38 @@
 import torch
+import torch.nn as nn
 
-from src.data import get_shakespeare
-from tatooine.ml.text.models import BigramLanguageModel
-from tatooine.ml.train import train_model
+from torch.nn import functional as F
+
+torch.manual_seed(1337)
+
+# batch, block size (# of tokens, AKA time), embedding dim (# channels)
+B, T, C = 1, 8, 4
+
+x = torch.randn(B, T, C)
 
 
-data = get_shakespeare()
+head_size = 16
 
-bm = BigramLanguageModel(data.vocab_size)
-bm = bm.to(data.device)
+key = nn.Linear(C, head_size, bias=False)
+query = nn.Linear(C, head_size, bias=False)
+value = nn.Linear(C, head_size, bias=False)
 
-gen = bm.generate(
-    torch.tensor(data.tokenizer.encode(" "), dtype=torch.long).reshape(1, -1), 100
-)
+k = key(x)
+q = query(x)
+v = value(x)
 
-print(data.tokenizer.decode(gen.tolist()[0]))
+weights = q @ k.transpose(-2, -1)
 
-optimizer = torch.optim.Adam(bm.parameters(), lr=1e-3)
+tril = torch.tril(torch.ones(T, T))
+weights = torch.zeros(T, T)
+weights = weights.masked_fill(tril == 0, float("-inf"))
 
-train_model(bm, data, optimizer)
+print(v)
 
-gen = bm.generate(
-    torch.tensor(data.tokenizer.encode(" "), dtype=torch.long).reshape(1, -1), 100
-)
-print(data.tokenizer.decode(gen.tolist()[0]))
+print(weights)
+
+weights = F.softmax(weights, dim=-1)
+
+print(weights)
+
+print(weights @ v)
