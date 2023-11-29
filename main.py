@@ -8,13 +8,13 @@ from tatooine.ml.train import train_model
 
 
 """ Parameters: """
-n_updates = 1000
-block_size = 64
+n_updates = 5001
+block_size = 256
 batch_size = 64
-n_embd = 64
-n_heads = 4
+n_embd = 384
+n_heads = 6
 n_layers = 6
-learning_rate = 1e-4
+learning_rate = 3e-4
 device = "cuda" if torch.cuda.is_available() else "cpu"
 loaded_model = "optimal.model"
 # loaded_model = None
@@ -39,6 +39,6 @@ train_model(
 start_token = (
     torch.tensor(data.tokenizer.encode(" "), dtype=torch.long).reshape(1, -1).to(device)
 )
-gen = bm.generate(start_token, 1000)
+gen = bm.generate(start_token, 5000)
 
 print(data.tokenizer.decode(gen.tolist()[0]))
