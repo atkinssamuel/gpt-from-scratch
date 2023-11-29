@@ -8,7 +8,7 @@ from tatooine.ml.train import train_model
 
 
 """ Parameters: """
-n_updates = 10000
+n_updates = 1000
 block_size = 64
 batch_size = 64
 n_embd = 64
@@ -24,18 +24,21 @@ data = Shakespeare(block_size, batch_size, device)
 bm = AttentionIsAllYouNeed(
     data.vocab_size, block_size, n_embd, n_heads, n_layers, device
 )
+bm.to(device)
 
 loaded_model = "models/" + loaded_model if loaded_model is not None else None
 if loaded_model is not None:
     print("Loading model...")
     bm.load_state_dict(torch.load(loaded_model))
 
+print(f"Training using {device}...")
 train_model(
     bm, data, torch.optim.Adam(bm.parameters(), lr=learning_rate), n_updates=n_updates
 )
 
-gen = bm.generate(
-    torch.tensor(data.tokenizer.encode(" "), dtype=torch.long).reshape(1, -1), 1000
+start_token = (
+    torch.tensor(data.tokenizer.encode(" "), dtype=torch.long).reshape(1, -1).to(device)
 )
+gen = bm.generate(start_token, 1000)
 
 print(data.tokenizer.decode(gen.tolist()[0]))
