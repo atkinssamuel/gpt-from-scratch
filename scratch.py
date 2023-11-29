@@ -10,7 +10,6 @@ B, T, C = 1, 8, 4
 
 x = torch.randn(B, T, C)
 
-
 head_size = 16
 
 key = nn.Linear(C, head_size, bias=False)

@@ -8,7 +8,7 @@ from tatooine.ml.train import train_model
 
 
 """ Parameters: """
-n_updates = 5001
+n_updates = 0
 block_size = 256
 batch_size = 64
 n_embd = 384
@@ -29,7 +29,7 @@ bm.to(device)
 loaded_model = "models/" + loaded_model if loaded_model is not None else None
 if loaded_model is not None:
     print("Loading model...")
-    bm.load_state_dict(torch.load(loaded_model))
+    bm.load_state_dict(torch.load(loaded_model, map_location=torch.device(device)))
 
 print(f"Training using {device}...")
 train_model(
