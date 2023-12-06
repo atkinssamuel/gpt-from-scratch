@@ -3,7 +3,7 @@ This repository contains a GPT-like model based on the [Let's build GPT: from sc
 
 
 # Environment Configuration
-Ensure the [tatooine](https://github.com/atkinssamuel/tatooine) repository exists a directory above this one. 
+Ensure the [tatooine](https://github.com/atkinssamuel/tatooine) repository exists a directory above this one. A compressed and verified version is included in this repository.
 
 ```
 ├── gpt-from-scratch/

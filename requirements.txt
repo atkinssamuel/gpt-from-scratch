@@ -1,2 +1,2 @@
--e ../tatooine
+../tatooine
 torch
