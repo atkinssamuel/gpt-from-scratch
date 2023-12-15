@@ -1,6 +1,6 @@
 import torch
 
-from src.data import get_data, get_shakespeare_info
+from src.data import Shakespeare, get_shakespeare_info
 from src.params import params
 from src.llm import (
     AttentionIsAllYouNeed,
@@ -8,10 +8,8 @@ from src.llm import (
 from src.utils import load_model
 
 if __name__ == "__main__":
-    device = 0
+    device = "cpu"  # 0 for GPU inference
     tokens, vocab_size, tokenizer = get_shakespeare_info()
-    n = int(0.9 * tokens.shape[0])
-    valid = get_data(tokens, "valid", n, params)
 
     model = AttentionIsAllYouNeed(
         vocab_size,
