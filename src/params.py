@@ -10,4 +10,6 @@ params = {
     "n_embd": 384,
     "n_heads": 6,
     "n_layers": 6,
+    "model_name": "optimal.model",
+    # "model_name": None,
 }

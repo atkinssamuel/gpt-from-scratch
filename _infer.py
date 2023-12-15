@@ -1,6 +1,6 @@
 import torch
 
-from src.data import Shakespeare, get_shakespeare_info
+from src.data import get_shakespeare_info
 from src.params import params
 from src.llm import (
     AttentionIsAllYouNeed,

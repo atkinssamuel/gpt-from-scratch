@@ -2,7 +2,7 @@ import torch
 import os
 
 from typing import Union
-
+from src.utils import load_model
 from torch.distributed import init_process_group, destroy_process_group
 from torch.utils.data.distributed import DistributedSampler
 from torch.utils.data import DataLoader
@@ -55,6 +55,9 @@ def training_thread(rank: Union[int, str], world_size: int, params: dict):
         rank,
     )
 
+    if params["model_name"] is not None:
+        load_model(model, rank, params["model_name"])
+
     train_model(
         model,
         train_loader,
@@ -64,6 +67,9 @@ def training_thread(rank: Union[int, str], world_size: int, params: dict):
         n_eval_iters=params["n_eval_iters"],
         n_updates=params["n_updates"],
         checkpoint_iter=params["checkpoint_iter"],
+        model_name=params["model_name"]
+        if params["model_name"] is not None
+        else "optimal.model",
     )
 
     if world_size != 0:
