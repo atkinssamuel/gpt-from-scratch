@@ -1,8 +1,8 @@
 params = {
     # training
-    "n_updates": 1000,
-    "checkpoint_iter": 10,
-    "n_eval_iters": 10,
+    "n_updates": 2500,
+    "checkpoint_iter": 50,
+    "n_eval_iters": 5,
     "learning_rate": 3e-4,
     # model
     "block_size": 256,
@@ -10,6 +10,6 @@ params = {
     "n_embd": 384,
     "n_heads": 6,
     "n_layers": 6,
-    "model_name": "optimal.model",
-    # "model_name": None,
+    "loaded_model_name": None,
+    "saved_model_name": "optimal.model",
 }

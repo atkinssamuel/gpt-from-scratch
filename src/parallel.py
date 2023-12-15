@@ -55,8 +55,8 @@ def training_thread(rank: Union[int, str], world_size: int, params: dict):
         rank,
     )
 
-    if params["model_name"] is not None:
-        load_model(model, rank, params["model_name"])
+    if params["loaded_model_name"] is not None:
+        load_model(model, rank, params["loaded_model_name"])
 
     train_model(
         model,
@@ -67,8 +67,8 @@ def training_thread(rank: Union[int, str], world_size: int, params: dict):
         n_eval_iters=params["n_eval_iters"],
         n_updates=params["n_updates"],
         checkpoint_iter=params["checkpoint_iter"],
-        model_name=params["model_name"]
-        if params["model_name"] is not None
+        model_name=params["saved_model_name"]
+        if params["saved_model_name"] is not None
         else "optimal.model",
     )
 
