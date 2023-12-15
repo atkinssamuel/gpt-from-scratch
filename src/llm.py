@@ -115,7 +115,6 @@ class AttentionIsAllYouNeed(nn.Module):
         device: str,
     ) -> None:
         super().__init__()
-
         self.block_size = block_size
         self.device = device
 

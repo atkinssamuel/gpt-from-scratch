@@ -1,2 +1,2 @@
-../tatooine
+-e ../tatooine
 torch
